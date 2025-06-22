@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - TIC Membership</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/membership.css">
+    <include src="/components/header.html"></include>
+</head>
+<body>
+    <section class="thank-you-section">
+        <div class="container">
+            <div class="thank-you-content">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h1>Thank You for Applying!</h1>
+                <p>Your application has been received successfully. We will review it and get back to you soon.</p>
+                <div class="next-steps">
+                    <h2>Next Steps:</h2>
+                    <ol>
+                        <li>Keep an eye on your email for updates</li>
+                        <li>Prepare for the orientation session</li>
+                        <li>Start exploring our resources</li>
+                    </ol>
+                </div>
+                <a href="/" class="home-button">Return to Homepage</a>
+            </div>
+        </div>
+    </section>
+    <style>
+        .thank-you-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .thank-you-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(145deg, #1c2344, #232b4f);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #1da1f2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+        }
+        
+        .next-steps {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(29,161,242,0.1);
+            border-radius: 10px;
+        }
+        
+        .next-steps h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .next-steps ol {
+            color: #a0a0a0;
+            margin-left: 1.5rem;
+        }
+        
+        .next-steps li {
+            margin: 0.5rem 0;
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #1da1f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background: #1991db;
+            transform: translateY(-2px);
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC Events</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/css/events.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/loading.js"></script>
+    <include src="/components/header.html"></include>
+    <style>
+        /* Global Background */
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #0d1b2a 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        /* Event Cards */
+        .event-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Event Poster */
+        .event-poster-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .event-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Navigation */
+        .arrow {
+            background: rgba(29, 161, 242, 0.2);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .arrow:hover {
+            background: rgba(29, 161, 242, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+            background: transparent;
+            z-index: 1;
+        }
+
+        .events-page {
+            position: relative;
+            padding: 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background: transparent;
+            z-index: 1;
+            margin-top: 80px;
+        }
+
+        .events-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .events-section {
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 650px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 30px 40px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: scale(0.95) translateX(100%);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            left: 0;
+            visibility: hidden;
+            will-change: transform, opacity;
+        }
+
+        .carousel-item.active,
+        .carousel-item.prev,
+        .carousel-item.next {
+            visibility: visible;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+            transform: scale(1) translateX(0);
+            pointer-events: auto;
+            z-index: 2;
+        }
+
+        .carousel-item.prev {
+            transform: scale(0.95) translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .carousel-item.next {
+            transform: scale(0.95) translateX(100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .event-poster-container {
+            width: 100%;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.4s ease;
+        }
+
+        .event-poster-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0));
+            pointer-events: none;
+        }
+
+        .event-poster {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: transform 0.4s ease;
+            padding: 10px;
+            will-change: transform;
+        }
+
+        .carousel-item:hover .event-poster-container {
+            transform: scale(1.02);
+        }
+
+        .carousel-item h3 {
+            font-size: 2.2rem;
+            margin: 0 0 15px;
+            color: #fff;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover h3 {
+            transform: translateY(-2px);
+        }
+
+        .event-time {
+            color: #4CAF50;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 20px;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 8px 20px;
+            border-radius: 25px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover .event-time {
+            transform: translateY(-2px);
+        }
+
+        .event-time::before {
+            content: '🕒';
+            font-size: 1.2rem;
+        }
+
+        .event-details {
+            width: 100%;
+            margin: 10px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover .event-details {
+            transform: translateY(-2px);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 0;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .detail-row:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2196F3;
+            min-width: 100px;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .faculty-name, .coordinator-name {
+            color: #fff;
+            opacity: 0.95;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .carousel-item p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #fff;
+            opacity: 0.9;
+            text-align: center;
+            margin: 20px 0 0;
+            max-width: 800px;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .arrow:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .left-arrow {
+            left: 20px;
+        }
+
+        .right-arrow {
+            right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .left-arrow {
+                left: 10px;
+            }
+
+            .right-arrow {
+                right: 10px;
+            }
+        }
+
+        @media (hover: none) {
+            .arrow {
+                opacity: 0.8;
+                background: rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+            max-width: 90%;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-dots {
+                gap: 6px;
+                padding: 8px 15px;
+            }
+
+            .dot {
+                width: 8px;
+                height: 8px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .carousel-container {
+                max-width: 95%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container {
+                height: 600px;
+                padding: 15px;
+            }
+
+            .carousel-item {
+                padding: 20px;
+            }
+
+            .event-poster-container {
+                height: 220px;
+                margin-bottom: 15px;
+            }
+
+            .carousel-item h3 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .event-time {
+                font-size: 0.95rem;
+                padding: 6px 15px;
+            }
+
+            .event-details {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .detail-row {
+                padding: 8px 12px;
+            }
+
+            .detail-label {
+                min-width: 80px;
+                font-size: 0.85rem;
+            }
+
+            .faculty-name,
+            .coordinator-name {
+                font-size: 0.85rem;
+            }
+
+            .carousel-item p {
+                font-size: 0.95rem;
+                margin: 12px 0 0;
+            }
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #fff;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #6b73ff, #000dff);
+            transform: scaleX(0.7);
+            transition: transform 0.3s ease;
+        }
+
+        .section-title:hover::after {
+            transform: scaleX(1);
+        }
+
+        .past-events {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(33, 150, 243, 0.3);
+        }
+
+        .event-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .event-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover .event-image-container img {
+            transform: scale(1.1);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #fff;
+            font-weight: 600;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card-date {
+            color: #2196F3;
+            margin: 8px 0 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .event-time {
+            color: #4CAF50;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-details {
+            margin: 10px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2196F3;
+            min-width: 120px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .faculty-name, .coordinator-name {
+            color: #fff;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .card-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(to top, rgba(0,0,0,0.2), transparent);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .register-btn:hover:not([disabled]) {
+            background: linear-gradient(45deg, #1976D2, #1565C0);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .register-btn[disabled] {
+            background: linear-gradient(45deg, #666, #444);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .register-btn {
+            background: linear-gradient(135deg, #6b73ff, #000dff);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: not-allowed;
+            opacity: 0.7;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .register-btn:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        .register-btn::after {
+            content: '(Closed)';
+            margin-left: 8px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .chatbot-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(30, 30, 30, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            transform: translateY(200%);
+            animation: slideUp 0.5s ease forwards 1s;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6b73ff, #000dff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bot-avatar::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        .bot-avatar i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .bot-message {
+            color: white;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .bot-message h4 {
+            background: linear-gradient(135deg, #6b73ff, #000dff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .bot-message p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .close-notification {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            opacity: 0.5;
+            cursor: pointer;
+            font-size: 18px;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-notification:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(200%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(107, 115, 255, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(107, 115, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(107, 115, 255, 0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-notification {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                padding: 15px;
+            }
+
+            .bot-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .bot-avatar i {
+                font-size: 20px;
+            }
+
+            .bot-message {
+                font-size: 0.85rem;
+            }
+        }
+
+        .swiper-pagination {
+            position: relative;
+            bottom: -20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .bonus-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FF4E50, #F9D423);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-item:hover .bonus-badge {
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .bonus-badge {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        .event-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .event-preview.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .preview-content {
+            position: relative;
+            max-width: 900px;
+            width: 90%;
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .event-preview.active .preview-content {
+            transform: scale(1);
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preview-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .preview-content {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .preview-close {
+                top: 10px;
+                right: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+        }
+
+        .see-all-events {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #6b73ff, #000dff);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 40px auto;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .see-all-events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .see-all-events:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .see-all-events:hover::before {
+            transform: translateX(100%);
+        }
+
+        .see-all-events i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .see-all-events:hover i {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .see-all-events {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+                margin: 30px auto;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .events-page {
+                margin-top: 60px;
+                padding: 15px;
+            }
+
+            .events-title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin: 20px 0;
+            }
+
+            .carousel-container {
+                margin-top: 20px;
+            }
+
+            .event-card {
+                margin: 10px;
+            }
+
+            .event-poster-container {
+                height: 180px;
+            }
+
+            .arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="events-page">
+        <!-- Events Section -->
+        <section class="events-section">
+            <h3 class="section-title">Featured Events</h3>
+            <div class="carousel-container">
+                <button class="arrow left-arrow">❮</button>
+                <button class="arrow right-arrow">❯</button>
+
+                <!-- Design Dynamo UI/UX -->
+                <div class="carousel-item active">
+                    <div class="event-poster-container">
+                        <img src="/images/events/ui-ux.jpg" alt="Design Dynamo UI/UX" class="event-poster">
+                    </div>
+                    <h3>Design Dynamo UI/UX</h3>
+                    <div class="event-time">11:00 AM - 12:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Pooja Pawar</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Santoshi Ubale, Chaitanya Patil</span>
+                        </div>
+                    </div>
+                    <p>Showcase your creative design skills in this competition focused on UI/UX, graphic design, and visual storytelling.</p>
+                </div>
+
+                <!-- Tech Quiz -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/tech-quiz.jpg" alt="Tech Quiz" class="event-poster">
+                    </div>
+                    <h3>Tech Quiz</h3>
+                    <div class="event-time">01:30 PM - 02:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Pruthviraj Sankpal</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Hariprasad Thorve</span>
+                        </div>
+                    </div>
+                    <p>Test your technical knowledge in this fast-paced quiz competition covering various domains of technology, computing, and innovation.</p>
+                </div>
+
+                <!-- Free Fire -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/freefire.jpg" alt="Esports (Free Fire)" class="event-poster">
+                    </div>
+                    <h3>Esports (Free Fire)</h3>
+                    <div class="event-time">06:00 PM onwards</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Coordinator:</span>
+                            <span class="coordinator-name">Sushant Kamble</span>
+                        </div>
+                    </div>
+                    <p>Compete in the popular battle royale game Free Fire. Show your gaming skills and strategy to be the last one standing!</p>
+                </div>
+
+                <!-- Tech Talk Debate -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/debate.jpg" alt="Tech Talk Debate" class="event-poster">
+                    </div>
+                    <h3>Tech Talk Debate</h3>
+                    <div class="event-time">11:00 AM - 12:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Payal Darne</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Manas Deshmukh</span>
+                        </div>
+                    </div>
+                    <p>Engage in a stimulating debate on emerging technologies and their impact on society. Present your viewpoints and challenge others in this intellectual contest.</p>
+                </div>
+
+                <!-- Techie Treasure Hunt -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/hunt.jpg" alt="Techie Treasure Hunt" class="event-poster">
+                    </div>
+                    <h3>Techie Treasure Hunt</h3>
+                    <div class="event-time">01:30 PM - 02:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Saiprasad Varpe</span>
+                        </div>
+                    </div>
+                    <p>Embark on an exciting treasure hunt with technical clues and puzzles that will challenge your problem-solving abilities.</p>
+                </div>
+
+                <!-- BGMI -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/bgmi.jpg" alt="Esports (BGMI)" class="event-poster">
+                    </div>
+                    <h3>Esports (BGMI)</h3>
+                    <div class="event-time">06:00 PM onwards</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Coordinator:</span>
+                            <span class="coordinator-name">Saiprasad Varpe</span>
+                        </div>
+                    </div>
+                    <p>Compete in Battlegrounds Mobile India. Form your squad and battle for the chicken dinner in this thrilling esports event.</p>
+                </div>
+
+                <!-- Ideation -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/idea.jpg" alt="Ideation - Startup Ideas" class="event-poster">
+                    </div>
+                    <h3>Ideation - Startup Ideas</h3>
+                    <div class="event-time">11:00 AM - 12:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Prof. Dnyaneshwar Kudande</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Soham Tambe</span>
+                        </div>
+                    </div>
+                    <p>Present your innovative startup ideas and business models. Get feedback from experts and refine your entrepreneurial vision.</p>
+                </div>
+
+                <!-- Escape the Bug -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/debug.jpg" alt="Escape the Bug" class="event-poster">
+                    </div>
+                    <h3>Escape the Bug - Debugging</h3>
+                    <div class="event-time">11:00 AM - 12:30 PM</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Suresh Reddy</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Shweta Kharat</span>
+                        </div>
+                    </div>
+                    <p>Put your debugging skills to the test by finding and fixing errors in code snippets across various programming languages.</p>
+                </div>
+
+                <!-- Story Building -->
+                <div class="carousel-item">
+                    <div class="event-poster-container">
+                        <img src="/images/events/story.jpg" alt="Story Building" class="event-poster">
+                    </div>
+                    <h3>Story Building</h3>
+                    <div class="event-time">01:30 PM onwards</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Faculty:</span>
+                            <span class="faculty-name">Ms. Ashwini Bhosale, Ms. Vrushali Bhamare</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">TIC Coordinator:</span>
+                            <span class="coordinator-name">Atharv Ganbavle</span>
+                        </div>
+                    </div>
+                    <p>Develop your narrative skills in this creative storytelling competition. Craft compelling stories around technology themes.</p>
+                </div>
+
+                <!-- Gaming Center -->
+                <div class="carousel-item">
+                    <div class="bonus-badge">BONUS</div>
+                    <div class="event-poster-container">
+                        <img src="/images/events/game.jpg" alt="Gaming Center" class="event-poster">
+                    </div>
+                    <h3>Gaming Center</h3>
+                    <div class="event-time">Throughout the event</div>
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Coordinator:</span>
+                            <span class="coordinator-name">Chaitanya Patil</span>
+                        </div>
+                    </div>
+                    <p>A special gaming center available for all participants throughout the event. Take a break between competitions and enjoy various gaming stations and experiences.</p>
+                </div>
+
+                <!-- Carousel Navigation Dots -->
+                <div class="carousel-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align: center;">
+            <a href="/pages/all-events.html" class="see-all-events">
+                See All Events <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Event Preview Modal -->
+    <div class="event-preview">
+        <div class="preview-content">
+            <button class="preview-close">&times;</button>
+            <img class="preview-image" src="" alt="">
+            <h2 class="event-title"></h2>
+            <div class="event-time"></div>
+            <div class="event-details"></div>
+            <button class="register-btn">Register</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Notification -->
+    <div class="chatbot-notification">
+        <div class="bot-avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="bot-message">
+            <h4>TechFusion 2K25-26</h4>
+            <p>Stay tuned! Event dates will be announced soon.</p>
+        </div>
+        <button class="close-notification">&times;</button>
+    </div>
+
+    <script src="/js/event-images.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.querySelector('.carousel-container');
+            const items = Array.from(carousel.querySelectorAll('.carousel-item'));
+            const leftArrow = carousel.querySelector('.left-arrow');
+            const rightArrow = carousel.querySelector('.right-arrow');
+            const dots = Array.from(carousel.querySelectorAll('.dot'));
+            let activeIndex = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            let isTransitioning = false;
+            let autoAdvanceInterval;
+
+            // Initialize first item as active and adjust images
+            updateCarousel();
+            adjustEventImages();
+
+            // Add click handlers for arrows with debounce
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            const handleNavigation = debounce((direction) => {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                stopAutoAdvance();
+
+                const prevIndex = activeIndex;
+                if (direction === 'left') {
+                    activeIndex = (activeIndex - 1 + items.length) % items.length;
+                } else {
+                    activeIndex = (activeIndex + 1) % items.length;
+                }
+
+                // Pre-load next and previous images
+                const nextIndex = (activeIndex + 1) % items.length;
+                const prevItemIndex = (activeIndex - 1 + items.length) % items.length;
+                preloadImage(items[nextIndex]);
+                preloadImage(items[prevItemIndex]);
+                
+                updateCarousel();
+                setTimeout(() => {
+                    isTransitioning = false;
+                    startAutoAdvance();
+                }, 600);
+            }, 100);
+
+            function preloadImage(item) {
+                const img = item.querySelector('.event-poster');
+                if (img && !img.complete) {
+                    img.setAttribute('loading', 'eager');
+                }
+            }
+
+            leftArrow.addEventListener('click', () => handleNavigation('left'));
+            rightArrow.addEventListener('click', () => handleNavigation('right'));
+
+            // Add click handlers for dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    if (isTransitioning || activeIndex === index) return;
+                    isTransitioning = true;
+                    stopAutoAdvance();
+                    activeIndex = index;
+                    updateCarousel();
+                    setTimeout(() => {
+                        isTransitioning = false;
+                        startAutoAdvance();
+                    }, 600);
+                });
+            });
+
+            // Add touch support with improved handling
+            let touchTimeout;
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                stopAutoAdvance();
+                clearTimeout(touchTimeout);
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', (e) => {
+                if (isTransitioning) return;
+                touchEndX = e.changedTouches[0].clientX;
+                handleSwipe();
+                touchTimeout = setTimeout(startAutoAdvance, 5000);
+            }, { passive: true });
+
+            // Add keyboard support
+            document.addEventListener('keydown', (e) => {
+                if (isTransitioning) return;
+                if (e.key === 'ArrowLeft') {
+                    handleNavigation('left');
+                } else if (e.key === 'ArrowRight') {
+                    handleNavigation('right');
+                }
+            });
+
+            function handleSwipe() {
+                const swipeDistance = touchEndX - touchStartX;
+                if (Math.abs(swipeDistance) > 50) {
+                    handleNavigation(swipeDistance > 0 ? 'left' : 'right');
+                }
+            }
+
+            function updateCarousel() {
+                items.forEach((item, index) => {
+                    item.classList.remove('active', 'prev', 'next');
+                    dots[index].classList.remove('active');
+
+                    if (index === activeIndex) {
+                        item.classList.add('active');
+                        dots[index].classList.add('active');
+                        preloadImage(item);
+                    } else if (index === (activeIndex - 1 + items.length) % items.length) {
+                        item.classList.add('prev');
+                    } else if (index === (activeIndex + 1) % items.length) {
+                        item.classList.add('next');
+                    }
+                });
+
+                // Adjust images after transition
+                requestAnimationFrame(() => {
+                    adjustEventImages();
+                });
+            }
+
+            function startAutoAdvance() {
+                stopAutoAdvance();
+                autoAdvanceInterval = setInterval(() => {
+                    if (!isTransitioning && document.hasFocus()) {
+                        handleNavigation('right');
+                    }
+                }, 5000);
+            }
+
+            function stopAutoAdvance() {
+                clearInterval(autoAdvanceInterval);
+            }
+
+            // Pause auto-advance on hover or touch
+            carousel.addEventListener('mouseenter', stopAutoAdvance);
+            carousel.addEventListener('mouseleave', startAutoAdvance);
+
+            // Handle visibility change and focus
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoAdvance();
+                } else {
+                    startAutoAdvance();
+                }
+            });
+
+            window.addEventListener('focus', startAutoAdvance);
+            window.addEventListener('blur', stopAutoAdvance);
+
+            // Handle window resize
+            window.addEventListener('resize', debounce(() => {
+                if (!isTransitioning) {
+                    adjustEventImages();
+                }
+            }, 100));
+
+            // Start auto-advance
+            startAutoAdvance();
+
+            // Preload adjacent images for smoother transitions
+            function preloadAdjacentImages() {
+                const nextIndex = (activeIndex + 1) % items.length;
+                const prevIndex = (activeIndex - 1 + items.length) % items.length;
+                [nextIndex, prevIndex].forEach(index => {
+                    const img = items[index].querySelector('.event-poster');
+                    if (img) {
+                        img.setAttribute('loading', 'eager');
+                    }
+                });
+            }
+
+            // Initial preload
+            preloadAdjacentImages();
+
+            // Preview functionality
+            const preview = document.querySelector('.event-preview');
+            const previewContent = preview.querySelector('.preview-content');
+            const previewClose = preview.querySelector('.preview-close');
+            const previewImage = preview.querySelector('.preview-image');
+            const previewTitle = preview.querySelector('.event-title');
+            const previewTime = preview.querySelector('.event-time');
+            const previewDetails = preview.querySelector('.event-details');
+
+            function showPreview(slide) {
+                const image = slide.querySelector('.event-poster').src;
+                const title = slide.querySelector('h3').textContent;
+                const time = slide.querySelector('.event-time').textContent;
+                const details = slide.querySelector('.event-details').innerHTML;
+
+                previewImage.src = image;
+                previewTitle.textContent = title;
+                previewTime.textContent = time;
+                previewDetails.innerHTML = details;
+
+                preview.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                stopAutoAdvance();
+            }
+
+            function closePreview() {
+                preview.classList.remove('active');
+                document.body.style.overflow = '';
+                startAutoAdvance();
+            }
+
+            // Add click handlers for carousel items
+            items.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // Don't show preview if clicking navigation elements
+                    if (!e.target.closest('.arrow') && !e.target.closest('.dot')) {
+                        showPreview(item);
+                    }
+                });
+            });
+
+            previewClose.addEventListener('click', closePreview);
+            preview.addEventListener('click', (e) => {
+                if (e.target === preview) closePreview();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closePreview();
+            });
+
+            // Chatbot notification handling
+            const notification = document.querySelector('.chatbot-notification');
+            const closeNotification = notification.querySelector('.close-notification');
+
+            closeNotification.addEventListener('click', () => {
+                notification.style.animation = 'slideUp 0.5s ease reverse forwards';
+                setTimeout(() => notification.remove(), 500);
+            });
+
+            // Auto-hide notification after 10 seconds
+            setTimeout(() => {
+                if (notification && notification.isConnected) {
+                    notification.style.animation = 'slideUp 0.5s ease reverse forwards';
+                    setTimeout(() => notification.remove(), 500);
+                }
+            }, 10000);
+        });
+    </script>
+    <include src="/components/footer.html"></include>
+    <script src="/js/include.js"></script>
+</body>
+</html>

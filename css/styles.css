@@ -1,0 +1,796 @@
+:root {
+    --header-height: 85px;
+    --primary-bg: linear-gradient(135deg, #0a192f 0%, #0d1b2a 100%);
+    --accent-color: #1da1f2;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* Base styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-padding-top: var(--header-height); /* For smooth scrolling to anchors */
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding-top: var(--header-height);
+    min-height: 100vh;
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Reset and base styles */
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.loading-text {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Hero Section */
+.hero {
+    padding: 80px 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+    background: transparent;
+}
+
+.hero-content h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #fff, var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.hero-content p {
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s;
+    z-index: -1;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    padding: 10px 25px;
+    border: 1px solid var(--text-primary);
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.hero-image {
+    position: relative;
+}
+
+.hero-image img {
+    max-width: 50%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.hero-image::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-color) 0%, transparent 75%);
+    opacity: 0.3;
+    z-index: 0;
+}
+
+/* Mission Section */
+.mission {
+    padding: 80px 5%;
+    text-align: center;
+    background: linear-gradient(0deg, #14182e 0%, #1c2344 100%);
+}
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mission-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 50px;
+}
+
+.mission-card {
+    background-color: #1c2344;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: left;
+    transition: box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background-color: var(--accent-color);
+    transition: height 0.3s;
+}
+
+.mission-card .icon {
+    background-color: var(--accent-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.mission-card h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.mission-card, .vision-card, .achievement-card, .cta-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-card:hover, .vision-card:hover, .achievement-card:hover, .cta-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(29, 161, 242, 0.2);
+    border-color: rgba(29, 161, 242, 0.3);
+}
+
+.mission-card::before, .vision-card::before, .achievement-card::before, .cta-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(29, 161, 242, 0.5), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mission-card:hover::before, .vision-card:hover::before, .achievement-card:hover::before, .cta-item:hover::before {
+    opacity: 1;
+}
+
+.mission-card, .vision-card, .achievement-card, .cta-item {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Vision Section */
+.vision {
+    padding: 80px 5%;
+    text-align: center;
+    background: linear-gradient(180deg, #14182e 0%, #1c2344 100%);
+}
+
+.vision-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.vision-card {
+    background-color: #1c2344;
+    padding: 35px;
+    border-radius: 10px;
+    text-align: left;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vision-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-color) 0%, transparent 400%);
+    border-radius: 10px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.vision-card .icon {
+    background-color: var(--accent-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.vision-card h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 1.6;
+}
+
+/* Floating CTA Section */
+.floating-cta {
+    position: relative;
+    padding: 40px 5%;
+    background: linear-gradient(135deg, #14182e 0%, #1c2344 100%);
+    margin-top: 60px;
+}
+
+.cta-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cta-item {
+    background: rgba(28, 35, 68, 0.8);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.cta-item i {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.cta-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.cta-item p {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background: var(--accent-color);
+    color: var(--text-primary);
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid var(--accent-color);
+}
+
+.cta-social {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #323b61;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+/* Events Preview Section */
+.events-preview {
+    padding: 80px 5%;
+    text-align: center;
+    background: linear-gradient(0deg, #14182e 0%, #1c2344 100%);
+}
+
+.event-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 50px 0 40px;
+}
+
+.event-card {
+    background-color: #1c2344;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-image {
+    width: 100%;
+    height: 200px;
+    background-color: #323b61;
+    position: relative;
+    overflow: hidden;
+}
+
+.event-card:nth-child(1) .event-image {
+    background: linear-gradient(135deg, #323b61 0%, #4b588d 100%);
+}
+
+.event-card:nth-child(2) .event-image {
+    background: linear-gradient(135deg, #323b61 0%, #4b588d 100%);
+}
+
+.event-card:nth-child(3) .event-image {
+    background: linear-gradient(135deg, #323b61 0%, #4b588d 100%);
+}
+
+.event-image::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-color) 0%, transparent 75%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.event-content {
+    padding: 25px;
+    text-align: left;
+}
+
+.event-content h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.event-content .date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.event-content .date i {
+    margin-right: 8px;
+    color: var(--accent-color);
+}
+
+/* Achievements Section */
+.achievements {
+    padding: 80px 5%;
+    text-align: center;
+    background: linear-gradient(180deg, #14182e 0%, #1c2344 100%);
+}
+
+.achievement-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    margin-top: 50px;
+}
+
+.achievement-card {
+    background: linear-gradient(145deg, #1c2344, #232b4f);
+    padding: 25px;
+    border-radius: 15px;
+    text-align: left;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+.achievement-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), #1e90ff);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.achievement-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.achievement-card .icon {
+    background: linear-gradient(135deg, var(--accent-color), #1e90ff);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(29, 161, 242, 0.2);
+}
+
+.achievement-card .icon i {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+}
+
+.achievement-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.achievement-content {
+    padding-left: 55px;
+}
+
+.achievement-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.achievement-image {
+    margin-top: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.achievement-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .hero-content {
+        order: 1;
+    }
+
+    .hero-image {
+        order: 2;
+    }
+
+    .hero-image img {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .hero-content p {
+        margin: 0 auto 30px;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .cta-container {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 40px 5%;
+        margin-top: 60px;
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+    }
+
+    .cta-container {
+        padding: 0 20px;
+    }
+
+    .mission-cards, .vision-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .event-cards {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .achievement-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .social-button {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .event-image {
+        height: 150px;
+    }
+
+    .section-padding {
+        padding: 40px 5%;
+    }
+
+    .floating-cta {
+        margin-top: 40px;
+        padding: 30px 5%;
+    }
+
+    .cta-item {
+        padding: 25px;
+    }
+
+    .cta-item i {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 30px 5%;
+        margin-top: 50px;
+    }
+
+    .hero-content h1 {
+        font-size: 24px;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
+    .hero-buttons {
+        gap: 10px;
+    }
+
+    .cta-container {
+        padding: 0 15px;
+    }
+
+    .cta-item {
+        padding: 20px;
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .mission-card, .vision-card {
+        padding: 20px;
+    }
+
+    .mission-card h3, .vision-card h3 {
+        font-size: 18px;
+    }
+
+    .event-content h3 {
+        font-size: 16px;
+    }
+
+    .event-content p {
+        font-size: 0.85rem;
+    }
+
+    .achievement-card {
+        padding: 20px;
+    }
+
+    .achievement-card h3 {
+        font-size: 18px;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+
+    .section-padding {
+        padding: 30px 5%;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 14px;
+    }
+
+    .social-button {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Add better touch handling for mobile */
+@media (hover: none) {
+    .btn-primary,
+    .btn-secondary,
+    .cta-button,
+    .social-button {
+        transform: none;
+    }
+
+    .cta-item {
+        transform: none;
+    }
+}

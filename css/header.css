@@ -1,0 +1,292 @@
+/* Header Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+    --header-height: 85px; /* Match the header's total height */
+}
+
+header {
+    background: rgba(10, 11, 25, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: visible;
+    height: var(--header-height);
+    box-sizing: border-box;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(29, 161, 242, 0.1) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: headerWave 8s linear infinite;
+    z-index: -1;
+}
+
+@keyframes headerWave {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+/* Logo styles */
+header a.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    height: 100%;
+    padding: 5px 0;
+}
+
+header a.logo img {
+    height: 85px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 2;
+    margin: -10px 0;
+}
+
+header a.logo:hover img {
+    transform: scale(1.05);
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 5px 0;
+    text-transform: capitalize;
+}
+
+.nav-menu ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #1da1f2, transparent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.5s ease;
+}
+
+.nav-menu ul li a:hover {
+    color: #1da1f2;
+    text-shadow: 0 0 15px rgba(29, 161, 242, 0.3);
+}
+
+.nav-menu ul li a:hover::before {
+    transform: scaleX(1);
+    animation: waveFlow 2s linear infinite;
+}
+
+@keyframes waveFlow {
+    0% {
+        background: linear-gradient(90deg, transparent, #1da1f2, transparent);
+        background-size: 200% 100%;
+        background-position: -100% 0;
+    }
+    100% {
+        background: linear-gradient(90deg, transparent, #1da1f2, transparent);
+        background-size: 200% 100%;
+        background-position: 100% 0;
+    }
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 10px;
+}
+
+.mobile-menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 6px 0;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+/* Mobile menu active state */
+.mobile-menu-toggle.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.mobile-menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+        margin-right: 10px;
+    }
+
+    .mobile-menu-toggle .bar {
+        width: 28px;
+        height: 3px;
+        background-color: #1da1f2;
+        margin: 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-toggle.active .bar:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+        background-color: white;
+    }
+
+    .mobile-menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu-toggle.active .bar:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+        background-color: white;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: 0;
+        background: rgba(10, 11, 25, 0.7);
+        backdrop-filter: blur(8px);
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-menu.active {
+        height: calc(100vh - var(--header-height));
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-menu ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 280px;
+        gap: 20px;
+        box-sizing: border-box;
+    }
+
+    .nav-menu ul li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-menu ul li a {
+        display: inline-block;
+        font-size: 18px;
+        padding: 8px 15px;
+        color: white;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        width: auto;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .nav-menu ul li a::before {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #1da1f2, transparent);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.5s ease;
+    }
+
+    .nav-menu ul li a:hover {
+        color: #1da1f2;
+        text-shadow: 0 0 15px rgba(29, 161, 242, 0.3);
+        transform: none;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .nav-menu ul li a:hover::before {
+        transform: scaleX(1);
+        animation: waveFlow 2s linear infinite;
+    }
+}
+
+/* Ensure all main content starts below header */
+body {
+    padding-top: var(--header-height);
+    min-height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+main, .container, section:first-of-type {
+    margin-top: 0;
+    padding-top: 20px; /* Add some breathing room */
+}
